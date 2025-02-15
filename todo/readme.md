@@ -5,6 +5,29 @@
 
 ---
 
+# DIFFERENT
+
+redraw diagram for vote and for other operations
+set net_id but not net_view for disconnect events
+check instant events all read
+verify if notifications are present for instant events
+
+/_ board _/
+
+- notifications write to db only once
+
+/_ nets_guests _/
+
+- create tests
+- create notifications (
+  - write to db,
+  - write only once,
+  - check max level,
+  - remove if there are not empty nodes,
+  - sorting
+  - send events if waiting is removed
+    )
+
 # BACK
 
 ## ARCHITECTURE

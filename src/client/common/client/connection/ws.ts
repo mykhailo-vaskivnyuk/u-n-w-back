@@ -47,7 +47,7 @@ class WsConnection extends EventEmitter {
     return new Promise(executor);
   }
 
-  async createConnection() {
+  createConnection() {
     if (this.connecting) return;
     this.connecting = true;
     !this.socket && this.createSocket();

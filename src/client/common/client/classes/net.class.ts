@@ -62,7 +62,7 @@ export class Net {
     const { [netView!]: netViewData } = this.app.getState();
     const memberPosition = netViewData.findIndex((item) => item.node_id === nodeId);
     const member = netViewData[memberPosition];
-    this.member = new Member(member, this.app, this as any);
+    this.member = new Member(member!, this.app, this as any);
     if (!member) this.app.setError(new HttpResponseError(404));
   }
 

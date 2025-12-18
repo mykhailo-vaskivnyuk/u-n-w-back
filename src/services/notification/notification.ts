@@ -77,8 +77,10 @@ export class NotificationService {
       // logger.warn('SEND TO EMAIL', user_id, email);
       const date = new Date().toUTCString();
       let success = false;
-      if (!env.TEST) {
+      if (!(env.TEST || env.DEV)) {
         success = await mailService.notify(email!);
+      } else {
+        success = true;
       }
       if (success) {
         await execQuery.user.events

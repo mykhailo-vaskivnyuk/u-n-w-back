@@ -17,47 +17,44 @@ class Connection implements IDatabaseConnection {
     client.release();
   }
 
-  disconnect(): void {
-    this.pool.end();
+  disconnect(): Promise<void> {
+    return this.pool.end();
   }
 
-  async query(sql: string, params: any[]): Promise<QueryResultRow> {
-    const { rows } = await this.pool!.query(sql, params);
+  async query(sql: string, params: any[] = []): Promise<QueryResultRow> {
+    const { rows } = await this.pool.query(sql, params);
     return rows;
   }
 
   async getTransactionConnection(): Promise<ITransactionConnection> {
     const client = await this.pool.connect();
-    let closed = false;
 
     const query = async (
       sql: string,
-      params: any[],
+      params: any[] = [],
     ): Promise<QueryResultRow> => {
-      if (closed) throw new Error('Connection is closed');
-      try {
-        const { rows } = await client.query(sql, params);
-        return rows;
-      } catch (e) {
-        closed = true;
-        client.release();
-        throw e;
-      }
+      const { rows } = await client.query(sql, params);
+      return rows;
     };
 
-    await query('BEGIN;', []);
-
     const commit = async () => {
-      await query('COMMIT;', []);
-      closed = true;
+      await client.query('COMMIT;');
       client.release();
     };
 
     const rollback = async () => {
-      await query('ROLLBACK;', []);
-      closed = true;
-      client.release();
+      try {
+        await client.query('ROLLBACK;');
+      } finally {
+        client.release();
+      }
     };
+
+    try {
+      await client.query('BEGIN;');
+    } catch {
+      rollback();
+    }
 
     return { query, commit, rollback };
   }

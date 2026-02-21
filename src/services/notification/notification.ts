@@ -77,8 +77,10 @@ export class NotificationService {
       // logger.warn('SEND TO EMAIL', user_id, email);
       const date = new Date().toUTCString();
       let success = false;
-      if (!env.TEST) {
+      if (!(env.TEST || env.DEV)) {
         success = await mailService.notify(email!);
+      } else {
+        success = true;
       }
       if (success) {
         await execQuery.user.events
@@ -143,11 +145,11 @@ export class NotificationService {
       prevNotifDateStr,
     ]);
 
+    const message: T.INewEventsMessage = { type: 'NEW_EVENTS' };
     for (const user of users) {
       const { user_id } = user!;
       const connectionIds = this.chat.getUserConnections(user_id);
       if (connectionIds) {
-        const message: T.INewEventsMessage = { type: 'NEW_EVENTS' };
         this.messageStream.push({ user_id, connectionIds, message });
       } else this.tgStream.push(user);
     }
@@ -165,11 +167,11 @@ export class NotificationService {
       prevNotifDateStr,
     ]);
 
+    const message: T.INewEventsMessage = { type: 'NEW_EVENTS' };
     for (const user of users) {
       const { user_id } = user!;
       const connectionIds = this.chat.getUserConnections(user_id);
       if (connectionIds) {
-        const message: T.INewEventsMessage = { type: 'NEW_EVENTS' };
         this.messageStream.push({ user_id, connectionIds, message });
       }
       this.mailStream.push(user);

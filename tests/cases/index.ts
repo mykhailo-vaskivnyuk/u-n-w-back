@@ -3,6 +3,7 @@ export * as cases02 from './net';
 export * as cases03_1 from './net.vote.1';
 export * as cases03_2 from './net.vote.2';
 export * as cases03_3 from './net.vote.3';
+export * as cases03_4 from './net.vote.4';
 export * as cases04 from './chat';
 export * as cases05 from './dislike';
 export * as cases06_1 from './invite';

@@ -4,6 +4,7 @@ export const TABLES_MAP = {
   NETS: 'nets',
   USERS: 'users',
   NETS_DATA: 'nets_data',
+  NETS_GUESTS: 'nets_guests',
   MEMBERS: 'members',
   MEMBERS_INVITES: 'members_invites',
   EVENTS: 'events',
@@ -110,6 +111,7 @@ export type ITableMembersToMembers = {
   to_member_id: number;
   dislike: boolean;
   vote: boolean;
+  replacing: boolean;
 };
 
 export type ITableSessions = {

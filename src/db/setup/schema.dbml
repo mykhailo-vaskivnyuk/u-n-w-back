@@ -1,3 +1,5 @@
+// https://dbdiagram.io/
+
 Table "nodes" {
   "node_id" bigint [primary key, not null]
   "node_level" integer [not null, default: 0]

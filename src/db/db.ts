@@ -12,20 +12,20 @@ import { Transaction } from './transaction';
 
 class Database implements IDatabase {
   private config: IDatabaseConfig;
-  private connection?: IDatabaseConnection;
-  private queries?: IDatabaseQueries;
+  private connection: IDatabaseConnection;
+  private queries = {} as IDatabaseQueries;
 
   constructor(config: IDatabaseConfig) {
     this.config = config;
     this.sqlToQuery = this.sqlToQuery.bind(this);
-  }
-
-  async init() {
     const { connectionPath, connection: connectionConfig } = this.config;
     const Connection = require(connectionPath);
     this.connection = new Connection(connectionConfig);
+  }
+
+  async init() {
     try {
-      await this.connection!.connect();
+      await this.connection.connect();
     } catch (e: any) {
       logger.error(e);
       throw new DatabaseError('DB_CONNECTION_ERROR');
@@ -43,17 +43,16 @@ class Database implements IDatabase {
   }
 
   disconnect() {
-    this.connection?.disconnect();
+    this.connection.disconnect();
   }
 
   getQueries() {
-    if (!this.queries) throw new DatabaseError('DB_INIT_ERROR');
     return this.queries;
   }
 
   async startTransaction(): Promise<ITransaction> {
     try {
-      const connection = await this.connection!.getTransactionConnection();
+      const connection = await this.connection.getTransactionConnection();
       return new Transaction(connection, this.queries!);
     } catch (e) {
       logger.error(e);
@@ -65,7 +64,7 @@ class Database implements IDatabase {
     return async (params, connection) => {
       try {
         if (connection) return await connection.query(sql, params);
-        return await this.connection!.query(sql, params);
+        return await this.connection.query(sql, params);
       } catch (e: any) {
         logger.error(e, 'QUERY: ', pathname, sql, '\n', 'PARAMS: ', params);
         throw new DatabaseError('DB_QUERY_ERROR');

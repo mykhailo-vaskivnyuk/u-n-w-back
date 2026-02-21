@@ -4,6 +4,7 @@ export const TABLES_MAP = {
   NETS: 'nets',
   USERS: 'users',
   NETS_DATA: 'nets_data',
+  NETS_GUESTS: 'nets_guests',
   MEMBERS: 'members',
   MEMBERS_INVITES: 'members_invites',
   EVENTS: 'events',

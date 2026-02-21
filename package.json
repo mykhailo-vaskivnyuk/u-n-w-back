@@ -11,7 +11,7 @@
     "dev": "cross-env NODE_ENV=development nodemon js/src/index.js",
     "debug": "nodemon --inspect js/src/index.js",
     "test": "cross-env NODE_ENV=test node js/tests/app.test.js",
-    "tsc": "npm run rmjs && tsc --watch",
+    "watch": "npm run rmjs && tsc --watch",
     "lint": "eslint .",
     "format": "prettier --write .",
     "db:setup": "cd src/db/setup && sh ./setup.sh",
